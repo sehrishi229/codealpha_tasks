@@ -1,0 +1,31 @@
+<div class="following-container max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-4">Following</h1>
+
+  <% if (users.length === 0) { %>
+    <div class="card">
+      <div class="card-body text-center py-8">
+        <i class="fas fa-user-friends text-4xl text-gray-300 mb-4"></i>
+        <p class="text-gray">Not following anyone yet.</p>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="user-list">
+      <% users.forEach(user => { %>
+        <div class="user-card">
+          <img src="/uploads/<%= user.profile_picture || 'default-avatar.svg' %>"
+               alt="<%= user.username %> avatar" class="avatar">
+          <div class="user-info">
+            <a href="/profile/<%= user.username %>" class="user-name"><%= user.full_name || user.username %></a>
+            <span class="user-username">@<%= user.username %></span>
+          </div>
+          <% if (currentUser && currentUser.id !== user.id) { %>
+            <button class="btn btn-sm follow-btn" data-user-id="<%= user.id %>"
+                    data-action="<%= user.is_following ? 'unfollow' : 'follow' %>">
+              <%= user.is_following ? 'Following' : 'Follow' %>
+            </button>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

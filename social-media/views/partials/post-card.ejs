@@ -1,0 +1,62 @@
+<div class="post-cards-container">
+  <% posts.forEach(post => { %>
+    <div class="post-card" id="post-<%= post.id %>">
+      <div class="post-header">
+        <img src="<%= getAvatarUrl({ profile_picture: post.profile_picture, username: post.username, full_name: post.full_name }) %>"
+             alt="<%= post.username %> avatar" class="avatar">
+        <div>
+          <a href="/profile/<%= post.username %>" class="post-author"><%= post.full_name || post.username %></a>
+          <span class="post-username">@<%= post.username %></span>
+        </div>
+        <span class="post-time"><%= formatTime(post.created_at) %></span>
+      </div>
+
+      <% if (post.image) { %>
+        <div class="post-image">
+          <img src="/uploads/<%= post.image %>" alt="Post image" class="post-img">
+        </div>
+      <% } %>
+
+      <% if (post.document) { %>
+        <div class="post-document">
+          <a href="/uploads/<%= post.document %>" target="_blank" class="document-link">
+            <i class="fas fa-file-pdf"></i>
+            <span>View Document</span>
+          </a>
+        </div>
+      <% } %>
+
+      <div class="post-content">
+        <p class="post-text"><%= escapeHtml(post.content) %></p>
+      </div>
+
+      <% if (post.user_id === currentUser.id) { %>
+        <div class="post-actions">
+          <a href="/edit-post/<%= post.id %>" class="btn btn-sm btn-ghost">
+            <i class="fas fa-edit"></i> Edit
+          </a>
+          <a href="/delete-post/<%= post.id %>" class="btn btn-sm btn-ghost btn-danger"
+             onclick="return confirmDeletePost(event, <%= post.id %>)">
+            <i class="fas fa-trash"></i> Delete
+          </a>
+        </div>
+      <% } %>
+
+      <div class="post-stats">
+        <span><%= post.like_count %> likes</span>
+        <span><%= post.comment_count %> comments</span>
+        <a href="/post/<%= post.id %>" class="view-comments">View all comments</a>
+      </div>
+
+      <div class="post-interactions">
+        <button class="interaction-btn like-btn" data-post-id="<%= post.id %>">
+          <i class="fas fa-heart <%= post.user_liked ? 'liked' : '' %>"></i>
+        </button>
+        <span class="like-count-display"><%= post.like_count %></span>
+        <a href="/post/<%= post.id %>" class="interaction-btn">
+          <i class="far fa-comment"></i>
+        </a>
+      </div>
+    </div>
+  <% }) %>
+</div>

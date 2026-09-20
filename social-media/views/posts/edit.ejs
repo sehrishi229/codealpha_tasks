@@ -1,0 +1,66 @@
+<div class="create-post-container">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Edit Post</h1>
+
+    <% if (errors && errors.length) { %>
+      <div class="alert alert-error">
+        <% errors.forEach(e => { %>
+          <span><%= typeof e === 'string' ? e : (e.msg || e) %></span>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <div class="card">
+      <div class="card-header">
+        <img src="<%= getAvatarUrl({ profile_picture: currentUser.profile_picture, username: currentUser.username, full_name: currentUser.full_name }) %>"
+             alt="Your avatar" class="avatar-sm">
+        <span class="font-semibold"><%= currentUser.full_name || currentUser.username %></span>
+      </div>
+      <div class="card-body">
+        <form action="/edit-post/<%= post.id %>" method="POST" enctype="multipart/form-data" class="post-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div class="form-group">
+            <textarea name="content" id="content" rows="4" maxlength="5000" required><%= post.content %></textarea>
+          </div>
+
+          <% if (post.image) { %>
+            <div class="mb-2">
+              <img src="/uploads/<%= post.image %>" alt="Current image" class="preview-image">
+              <p class="text-gray text-sm mt-1">Current image (will be kept unless replaced)</p>
+            </div>
+          <% } %>
+
+          <div class="form-group">
+            <div class="flex gap-2 items-center">
+              <label for="image" class="btn btn-ghost btn-sm">
+                <i class="fas fa-image"></i> Replace Photo
+              </label>
+              <input type="file" id="image" name="image" accept="image/*" style="display: none;">
+              <label for="document" class="btn btn-ghost btn-sm">
+                <i class="fas fa-file-alt"></i> Replace Document
+              </label>
+              <input type="file" id="document" name="document" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" style="display: none;">
+              <% if (post.document) { %>
+                <span class="text-gray text-sm">Current document: <%= post.document %></span>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <div id="imagePreview" class="hidden">
+              <img id="previewImg" src="" alt="Preview" class="preview-image">
+              <button type="button" id="removeImage" class="btn btn-sm btn-ghost btn-danger">
+                <i class="fas fa-times"></i> Remove
+              </button>
+            </div>
+            <div class="flex space-x-2">
+              <a href="/" class="btn btn-ghost">Cancel</a>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

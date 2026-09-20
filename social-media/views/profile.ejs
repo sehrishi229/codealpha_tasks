@@ -1,0 +1,84 @@
+<div class="profile-container">
+  <div class="profile-header card">
+    <div class="profile-cover">
+      <img src="<%= getAvatarUrl({ profile_picture: profile.profile_picture, username: profile.username, full_name: profile.full_name }, 'xl') %>"
+           alt="<%= profile.username %> avatar" class="avatar-xl">
+    </div>
+    <div class="profile-info">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="profile-name"><%= profile.full_name %></h1>
+          <p class="text-gray">@<%= profile.username %></p>
+          <p class="text-gray-2 mt-1"><%= profile.bio || 'No bio yet.' %></p>
+        </div>
+        <% if (!isOwnProfile) { %>
+          <form id="followForm<%= profile.id %>" class="follow-form">
+            <button type="button" class="btn btn-primary follow-btn"
+              data-user-id="<%= profile.id %>"
+              data-action="follow">
+              Follow
+            </button>
+          </form>
+        <% } %>
+      </div>
+      <div class="profile-stats">
+        <span><strong><%= profile.posts_count %></strong> posts</span>
+        <a href="/followers/<%= profile.id %>" class="profile-stat-link">
+          <strong><%= profile.followers_count %></strong> followers
+        </a>
+        <a href="/following/<%= profile.id %>" class="profile-stat-link">
+          <strong><%= profile.following_count %></strong> following
+        </a>
+      </div>
+      <p class="profile-join-date">
+        <i class="far fa-calendar"></i> Joined <%= formatDate(profile.created_at) %>
+      </p>
+    </div>
+  </div>
+
+  <% if (isOwnProfile && currentUser) { %>
+    <div class="card">
+      <div class="card-header">
+        <img src="<%= getAvatarUrl({ profile_picture: currentUser.profile_picture, username: currentUser.username, full_name: currentUser.full_name }) %>"
+             alt="Your avatar" class="avatar-sm">
+        <span class="font-semibold"><%= currentUser.full_name || currentUser.username %></span>
+      </div>
+      <div class="card-body">
+        <form action="/create-post" method="POST" enctype="multipart/form-data" class="post-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-group">
+            <textarea name="content" placeholder="What's on your mind?" rows="3" maxlength="5000" required></textarea>
+          </div>
+          <div class="form-group">
+            <div class="flex gap-2 items-center">
+              <label for="profileImage" class="btn btn-ghost btn-sm">
+                <i class="fas fa-image"></i> Add Photo
+              </label>
+              <input type="file" id="profileImage" name="image" accept="image/*" style="display: none;">
+              <label for="profileDocument" class="btn btn-ghost btn-sm">
+                <i class="fas fa-file-alt"></i> Add Document
+              </label>
+              <input type="file" id="profileDocument" name="document" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" style="display: none;">
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button type="submit" class="btn btn-primary">Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="profile-posts">
+    <% if (posts.length === 0) { %>
+      <div class="card">
+        <div class="card-body text-center py-8">
+          <i class="fas fa-image text-4xl text-gray-300 mb-4"></i>
+          <p class="text-gray">No posts yet.</p>
+        </div>
+      </div>
+    <% } else { %>
+      <%- include('partials/post-card', { posts: posts }) %>
+    <% } %>
+  </div>
+</div>

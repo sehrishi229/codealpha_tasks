@@ -1,0 +1,60 @@
+<div class="post-detail-container">
+  <div class="max-w-2xl mx-auto">
+    <%- include('../partials/single-post', { post: post, currentUser: currentUser }) %>
+
+    <% if (post.user_id === currentUser.id) { %>
+      <div class="post-actions-section">
+        <a href="/edit-post/<%= post.id %>" class="btn btn-sm btn-ghost">
+          <i class="fas fa-edit"></i> Edit Post
+        </a>
+        <a href="/delete-post/<%= post.id %>" class="btn btn-sm btn-ghost btn-danger"
+           onclick="return confirmDeletePost(event, <%= post.id %>)">
+          <i class="fas fa-trash"></i> Delete Post
+        </a>
+      </div>
+    <% } %>
+
+    <div class="comments-section">
+      <h3 class="comments-title">Comments (<%= comments.length %>)</h3>
+
+      <% if (comments.length === 0) { %>
+        <div class="no-comments">
+          <p class="text-gray">No comments yet. Be the first to comment!</p>
+        </div>
+      <% } else { %>
+        <div class="comments-list">
+          <% comments.forEach(comment => { %>
+            <div class="comment" id="comment-<%= comment.id %>">
+              <img src="<%= getAvatarUrl({ profile_picture: comment.profile_picture, username: comment.username, full_name: comment.full_name }) %>"
+                   alt="<%= comment.username %> avatar" class="avatar-sm">
+              <div class="comment-content">
+                <div class="comment-header">
+                  <span class="comment-author"><%= comment.full_name || comment.username %></span>
+                  <span class="comment-username">@<%= comment.username %></span>
+                  <span class="comment-time"><%= formatTime(comment.created_at) %></span>
+                </div>
+                <p class="comment-text"><%= escapeHtml(comment.content) %></p>
+              </div>
+              <% if (comment.user_id === currentUser.id) { %>
+                <button class="delete-comment-btn" data-comment-id="<%= comment.id %>">
+                  <i class="fas fa-trash"></i>
+                </button>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <% if (currentUser) { %>
+      <div class="add-comment">
+        <form id="commentForm<%= post.id %>" class="comment-form">
+          <img src="<%= getAvatarUrl({ profile_picture: currentUser.profile_picture, username: currentUser.username, full_name: currentUser.full_name }) %>"
+               alt="Your avatar" class="avatar-sm">
+          <textarea name="content" placeholder="Write a comment..." rows="2" maxlength="1000" required></textarea>
+          <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+</div>

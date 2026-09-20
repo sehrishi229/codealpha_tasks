@@ -1,0 +1,61 @@
+<nav class="navbar">
+  <div class="container mx-auto px-4 h-14 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <button class="mobile-menu-btn md:hidden" id="mobileMenuBtn">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+      <a href="/" class="navbar-brand">SocialApp</a>
+    </div>
+
+    <div class="hidden md:flex items-center space-x-6">
+      <% if (currentUser) { %>
+        <a href="/" class="nav-link <%= typeof currentPage === 'string' && currentPage === 'feed' ? 'active' : '' %>">
+          <i class="fas fa-home"></i> Home
+        </a>
+        <a href="/search" class="nav-link <%= typeof currentPage === 'string' && currentPage === 'search' ? 'active' : '' %>">
+          <i class="fas fa-search"></i> Search
+        </a>
+        <a href="/create-post" class="nav-link <%= typeof currentPage === 'string' && currentPage === 'create' ? 'active' : '' %>">
+          <i class="fas fa-plus"></i> Create
+        </a>
+        <a href="/profile/<%= currentUser.username %>" class="nav-link <%= typeof currentPage === 'string' && currentPage === 'profile' ? 'active' : '' %>">
+          <i class="fas fa-user"></i> Profile
+        </a>
+        <button id="logoutBtn" class="nav-link">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      <% } else { %>
+        <a href="/login" class="nav-link">Login</a>
+        <a href="/register" class="nav-link btn btn-primary ml-2">Sign Up</a>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="mobile-menu hidden md:hidden" id="mobileMenu">
+    <div class="flex flex-col py-2">
+      <% if (currentUser) { %>
+        <a href="/" class="mobile-nav-link">Home</a>
+        <a href="/search" class="mobile-nav-link">Search</a>
+        <a href="/create-post" class="mobile-nav-link">Create Post</a>
+        <a href="/profile/<%= currentUser.username %>" class="mobile-nav-link">Profile</a>
+        <button id="mobileLogoutBtn" class="mobile-nav-link text-left">Logout</button>
+      <% } else { %>
+        <a href="/login" class="mobile-nav-link">Login</a>
+        <a href="/register" class="mobile-nav-link">Sign Up</a>
+      <% } %>
+    </div>
+  </div>
+</nav>
+
+<script>
+  document.getElementById('mobileMenuBtn')?.addEventListener('click', function() {
+    document.getElementById('mobileMenu')?.classList.toggle('hidden');
+  });
+  document.getElementById('logoutBtn')?.addEventListener('click', function() {
+    fetch('/logout', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(() => window.location.href = '/login');
+  });
+  document.getElementById('mobileLogoutBtn')?.addEventListener('click', function() {
+    window.location.href = '/logout';
+  });
+</script>

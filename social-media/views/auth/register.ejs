@@ -1,0 +1,66 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Sign Up</h1>
+      <p>Join our community today</p>
+    </div>
+
+    <% if (errors && errors.length) { %>
+      <div class="alert alert-error">
+        <% if (typeof errors === 'string') { %>
+          <%= errors %>
+        <% } else { %>
+          <% errors.forEach(function(e) { %>
+            <% if (typeof e === 'string') { %>
+              <%= e %>
+            <% } else if (e.msg) { %>
+              <%= e.msg %>
+            <% } %>
+          <% }) %>
+        <% } %>
+      </div>
+    <% } %>
+
+    <form action="/register" method="POST" class="auth-form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div class="form-group">
+        <label for="username">Username *</label>
+        <input type="text" id="username" name="username" required
+               value="<%= old && old.username ? old.username : '' %>"
+               minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+">
+        <small>3-20 characters. Letters, numbers, and underscores only.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required
+               value="<%= old && old.email ? old.email : '' %>">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password *</label>
+        <input type="password" id="password" name="password" required minlength="6">
+        <small>At least 6 characters.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="full_name">Full Name *</label>
+        <input type="text" id="full_name" name="full_name" required
+               value="<%= old && old.full_name ? old.full_name : '' %>" maxlength="100">
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio" rows="3" maxlength="500"
+                  placeholder="Tell us about yourself..."><%= old && old.bio ? old.bio : '' %></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full">Sign Up</button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
+  </div>
+</div>
