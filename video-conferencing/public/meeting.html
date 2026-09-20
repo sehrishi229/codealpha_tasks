@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meeting - CollabMeet</title>
+  <link rel="stylesheet" href="/css/meeting.css" />
+</head>
+<body>
+  <div id="lobby" class="lobby">
+    <div class="lobby-content">
+      <div class="lobby-card">
+        <h1 id="lobbyMeetingTitle">Loading...</h1>
+        <p id="lobbyMeetingCode"></p>
+        <div class="lobby-preview">
+          <video id="lobbyVideo" autoplay muted playsinline></video>
+          <audio id="lobbyAudio" autoplay></audio>
+        </div>
+        <div class="lobby-controls">
+          <button id="toggleMicBtn" class="lobby-control-btn">Mute Audio</button>
+          <button id="toggleCamBtn" class="lobby-control-btn">Turn Off Camera</button>
+          <button id="joinMeetingBtn" class="btn btn-primary btn-lg" disabled>Join Meeting</button>
+        </div>
+        <p id="lobbyError" class="error-message"></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="meeting" class="meeting" style="display: none;">
+    <div class="meeting-header">
+      <div class="header-left">
+        <button id="leaveMeetingBtn" class="btn btn-danger btn-sm">Leave</button>
+      </div>
+      <div class="header-center">
+        <h2 id="meetingTitle">Meeting</h2>
+      </div>
+      <div class="header-right">
+        <span id="participantCount">0 / 0</span>
+      </div>
+    </div>
+
+    <div class="meeting-container">
+      <div class="video-grid" id="videoGrid">
+        <div class="video-placeholder" id="localVideoContainer">
+          <video id="localVideo" autoplay muted playsinline></video>
+          <div class="video-label" id="localVideoLabel">You</div>
+        </div>
+      </div>
+
+      <div class="sidebar" id="sidebar">
+        <div class="tab-bar">
+          <button class="tab-btn active" data-tab="chat">Chat</button>
+          <button class="tab-btn" data-tab="participants">Participants</button>
+          <button class="tab-btn" data-tab="files">Files</button>
+          <button class="tab-btn" data-tab="whiteboard">Whiteboard</button>
+        </div>
+
+        <div class="tab-content">
+          <div id="chatTab" class="tab-pane active">
+            <div class="messages-container" id="messagesContainer">
+              <div class="message welcome">Welcome to the meeting!</div>
+            </div>
+            <form class="message-input" id="messageForm">
+              <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" />
+              <button type="submit" class="btn btn-sm">Send</button>
+            </form>
+          </div>
+
+          <div id="participantsTab" class="tab-pane">
+            <div class="participants-list" id="participantsList">
+              <div class="participant-item you">
+                <span class="participant-name">You (Host)</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="filesTab" class="tab-pane">
+            <div class="files-list" id="filesList">
+              <p class="loading">No files shared yet</p>
+            </div>
+            <form class="file-upload" id="fileUploadForm">
+              <input type="file" id="fileInput" />
+              <button type="submit" class="btn btn-sm">Share</button>
+            </form>
+          </div>
+
+          <div id="whiteboardTab" class="tab-pane">
+            <div class="whiteboard-container">
+              <canvas id="whiteboard" width="600" height="400"></canvas>
+              <div class="whiteboard-tools">
+                <button id="clearWhiteboard" class="btn btn-sm btn-secondary">Clear</button>
+                <button id="eraseWhiteboard" class="btn btn-sm btn-secondary">Eraser</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meeting-toolbar">
+      <button id="toggleMicBtn2" class="toolbar-btn" title="Mute/Unmute">
+        <span class="toolbar-icon">🎤</span>
+        <span class="toolbar-label">Unmute</span>
+      </button>
+      <button id="toggleCamBtn2" class="toolbar-btn" title="Start/Stop Video">
+        <span class="toolbar-icon">🎥</span>
+        <span class="toolbar-label">Stop Video</span>
+      </button>
+      <button id="toggleScreenBtn" class="toolbar-btn" title="Share Screen">
+        <span class="toolbar-icon">📺</span>
+        <span class="toolbar-label">Share Screen</span>
+      </button>
+      <button id="toggleChatBtn" class="toolbar-btn" title="Toggle Chat">
+        <span class="toolbar-icon">💬</span>
+        <span class="toolbar-label">Chat</span>
+      </button>
+      <button id="toggleParticipantsBtn" class="toolbar-btn" title="Participants">
+        <span class="toolbar-icon">👥</span>
+        <span class="toolbar-label">Participants</span>
+      </button>
+      <button id="toggleWhiteboardBtn" class="toolbar-btn" title="Whiteboard">
+        <span class="toolbar-icon">🎨</span>
+        <span class="toolbar-label">Whiteboard</span>
+      </button>
+      <button id="toggleFilesBtn" class="toolbar-btn" title="Files">
+        <span class="toolbar-icon">📎</span>
+        <span class="toolbar-label">Files</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="/js/meeting.js"></script>
+</body>
+</html>
