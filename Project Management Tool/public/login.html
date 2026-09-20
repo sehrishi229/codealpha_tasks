@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CollaboBoard</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>CollaboBoard</h1>
+            <p>Sign in to your account</p>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="/register">Register</a></p>
+            </div>
+
+            <div id="error-message" class="error-message hidden"></div>
+        </div>
+    </div>
+    <script src="/js/auth.js"></script>
+</body>
+</html>
